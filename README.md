@@ -3,7 +3,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/theakhinabraham/doable-todo-list-app">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="img/logo.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Doable Todo List App</h3>
