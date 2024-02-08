@@ -64,7 +64,7 @@
 # About Doable: Todo List App
 <br>
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+<!-- TODO: ADD SCREENS -->
 
 <br>
 Doable is a Todo List App that makes your life well-organised and productive. It's easy-to-use UI and professional design makes Doeable the best Todo List App for you. Doable allows you to get more work done and arrange your scattered Todo List from your mind. More than just a Todo List, Doable is your key to:
