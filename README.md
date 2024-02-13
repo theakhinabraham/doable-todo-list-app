@@ -63,8 +63,9 @@
 <!-- ABOUT THE PROJECT -->
 # About Doable: Todo List App
 <br>
-
-<!-- TODO: ADD SCREENS -->
+<p align="center">
+<img src="/img/home-preview.png" style="height:auto; width:186px;"> <img src="/img/add-task-preview.png" style="height:auto; width:186px;"> <img src="/img/edit-task-preview.png" style="height:auto; width:186px;"> <img src="/img/filter-preview.png" style="height:auto; width:186px;"> <img src="/img/notification-preview.png" style="height:auto; width:186px;">    
+</p>
 
 <br>
 Doable is a Todo List App that makes your life well-organised and productive. It's easy-to-use UI and professional design makes Doeable the best Todo List App for you. Doable allows you to get more work done and arrange your scattered Todo List from your mind. More than just a Todo List, Doable is your key to:
@@ -138,7 +139,10 @@ Steps to install code and app into your local device (and run app on emulator or
 <!-- USAGE -->
 
 ## Usage
-<!-- TODO: ADD EXTRA SCREENSHOTS, CODE EXAMPLES AND DEMO -->
+<!-- TODO: ADD CODE EXAMPLES AND DEMO -->
+<p align="center">
+<img src="/img/home-preview.png" style="height:auto; width:186px;"> <img src="/img/add-task-preview.png" style="height:auto; width:186px;"> <img src="/img/edit-task-preview.png" style="height:auto; width:186px;"> <img src="/img/filter-preview.png" style="height:auto; width:186px;"> <img src="/img/notification-preview.png" style="height:auto; width:186px;">    
+</p>
 
 For more examples, please refer to the [Documentation](https://github.com/theakhinabraham/doable-todo-list-app/wiki)_
 
