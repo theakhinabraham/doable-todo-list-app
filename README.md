@@ -64,7 +64,7 @@
 # About Doable: Todo List App
 <br>
 <p align="center">
-<img src="/img/home-preview.png" style="height:auto; width:186px;"> <img src="/img/add-task-preview.png" style="height:auto; width:186px;"> <img src="/img/edit-task-preview.png" style="height:auto; width:186px;"> <img src="/img/filter-preview.png" style="height:auto; width:186px;"> <img src="/img/notification-preview.png" style="height:auto; width:186px;">    
+<img src="/img/home-preview.png" style="height:75vh; width:auto;"> <img src="/img/add-task-preview.png" style="height:75vh; width:auto;"> <img src="/img/edit-task-preview.png" style="height:75vh; width:auto;"> <img src="/img/filter-preview.png" style="height:75vh; width:auto;"> <img src="/img/notification-preview.png" style="height:75vh; width:auto;">    
 </p>
 
 <br>
@@ -141,7 +141,7 @@ Steps to install code and app into your local device (and run app on emulator or
 ## Usage
 <!-- TODO: ADD CODE EXAMPLES AND DEMO -->
 <p align="center">
-<img src="/img/home-preview.png" style="height:auto; width:186px;"> <img src="/img/add-task-preview.png" style="height:auto; width:186px;"> <img src="/img/edit-task-preview.png" style="height:auto; width:186px;"> <img src="/img/filter-preview.png" style="height:auto; width:186px;"> <img src="/img/notification-preview.png" style="height:auto; width:186px;">    
+<img src="/img/home-preview.png" style="height:75vh; width:auto;"> <img src="/img/add-task-preview.png" style="height:75vh; width:auto;"> <img src="/img/edit-task-preview.png" style="height:75vh; width:auto;"> <img src="/img/filter-preview.png" style="height:75vh; width:auto;"> <img src="/img/notification-preview.png" style="height:75vh; width:auto;">    
 </p>
 
 For more examples, please refer to the [Documentation](https://github.com/theakhinabraham/doable-todo-list-app/wiki)_
