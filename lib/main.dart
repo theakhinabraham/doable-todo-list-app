@@ -20,7 +20,7 @@ class DoableApp extends StatelessWidget {
           //Text color & Main icon color: Black
           primaryColor: const Color(0xff0c120c),
           //Accent color: Blue
-          acc: const Color(0xff4285F4),
+          focusColor: const Color(0xff4285F4),
           //Background color: White
           scaffoldBackgroundColor: const Color(0xffFDFDFF),
           //Sub icon color
