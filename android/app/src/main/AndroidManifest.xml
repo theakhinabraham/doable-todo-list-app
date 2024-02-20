@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="doable_todo_list_app"
+        android:label="Doable"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
