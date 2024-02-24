@@ -3,9 +3,18 @@ import 'package:doable_todo_list_app/screens/edit_task_page.dart';
 import 'package:doable_todo_list_app/screens/home_page.dart';
 import 'package:doable_todo_list_app/screens/settings_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:doable_todo_list_app/todos_notifier.dart';
+
+final todosProvider = StateNotifierProvider<TodosNotifier, TodosState>((ref) => TodosNotifier());
 
 void main() {
-  runApp(const DoableApp());
+  //Riverpod globally enabled
+  runApp(
+    const ProviderScope(
+      child: DoableApp(),
+    ),
+  );
 }
 
 class DoableApp extends StatelessWidget {
@@ -66,3 +75,8 @@ class DoableApp extends StatelessWidget {
     );
   }
 }
+
+// final todosProvider =
+//     StateNotifierProvider<TodosNotifier, List<TodosModel>>((ref) {
+//   return TodosNotifier;
+// });

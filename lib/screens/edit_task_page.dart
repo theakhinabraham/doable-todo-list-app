@@ -1,15 +1,15 @@
+import 'package:doable_todo_list_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:doable_todo_list_app/todos_notifier.dart';
 
-class EditTaskPage extends StatefulWidget {
-  const EditTaskPage({super.key});
+class EditTaskPage extends ConsumerWidget {
+  const EditTaskPage({Key? key}) : super(key: key);
 
   @override
-  State<EditTaskPage> createState() => _EditTaskPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final todos = ref.watch(todosProvider);
 
-class _EditTaskPageState extends State<EditTaskPage> {
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
+    return const Scaffold();
   }
 }
