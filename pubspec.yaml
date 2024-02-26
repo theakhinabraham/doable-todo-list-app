@@ -1,5 +1,5 @@
 name: doable_todo_list_app
-description: "A new Flutter project."
+description: "Offline To-do List"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -35,7 +35,6 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  flutter_launcher_icons: "^0.13.1"
   flutter_riverpod: ^2.4.10
 
 
@@ -49,11 +48,17 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.1
+  flutter_launcher_icons: ^0.13.1
 
-flutter_icons:
-  android: "launcher_icon"
+
+flutter_launcher_icons:
+  android: true
   ios: true
-  image_path: "img/logo.png"
+  remove_alpha_ios: true
+  image_path_android: "img/logo.png"
+  image_path_ios: "img/logo.png"
+  adaptive_icon_background: "img/background.png"
+  adaptive_icon_foreground: "img/foreground.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

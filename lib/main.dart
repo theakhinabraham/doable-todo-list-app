@@ -2,6 +2,7 @@ import 'package:doable_todo_list_app/screens/add_task_page.dart';
 import 'package:doable_todo_list_app/screens/edit_task_page.dart';
 import 'package:doable_todo_list_app/screens/home_page.dart';
 import 'package:doable_todo_list_app/screens/settings_page.dart';
+import 'package:doable_todo_list_app/todos_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:doable_todo_list_app/todos_notifier.dart';
