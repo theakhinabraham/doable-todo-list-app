@@ -11,15 +11,22 @@ import 'package:doable_todo_list_app/todos_notifier.dart';
 final todosProvider =
     StateNotifierProvider<TodosNotifier, TodosState>((ref) => TodosNotifier());
 
+//Colors
+Color blackColor = const Color(0xff0c120c);
+Color blueColor = const Color(0xff4285F4);
+Color whiteColor = const Color(0xffFDFDFF);
+Color iconColor = const Color(0xff565656);
+Color outlineColor = const Color(0xffD6D6D6);
+Color descriptionColor = const Color(0xff565656);
+
 void main() {
   //status bar & navigation bar colors and themes
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Color(0xffFDFDFF),
-    statusBarIconBrightness: Brightness.dark,
-    systemNavigationBarColor: Color(0xffFDFDFF),
-    systemNavigationBarIconBrightness: Brightness.dark,
-    systemNavigationBarDividerColor: Color(0xffD6D6D6)
-  ));
+      statusBarColor: Color(0xffFDFDFF),
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: Color(0xffFDFDFF),
+      systemNavigationBarIconBrightness: Brightness.dark,
+      systemNavigationBarDividerColor: Color(0xffD6D6D6)));
 
   //Riverpod globally enabled
   runApp(
@@ -38,19 +45,6 @@ class DoableApp extends StatelessWidget {
       home: const HomePage(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          //Text color & Main icon color: Black
-          primaryColor: const Color(0xff0c120c),
-          //Accent color: Blue
-          focusColor: const Color(0xff4285F4),
-          //Background color: White
-          scaffoldBackgroundColor: const Color(0xffFDFDFF),
-          //Sub icon color
-          cardColor: const Color(0xff565656),
-          //Border color
-          shadowColor: const Color(0xffD6D6D6),
-          //Description text color & Hint text color
-          hintColor: const Color(0xff565656),
-
           //font family
           fontFamily: "Inter",
           textTheme: const TextTheme(
@@ -74,19 +68,16 @@ class DoableApp extends StatelessWidget {
                 fontSize: 15.0,
                 fontWeight: FontWeight.w600,
                 color: Color(0xff565656)),
-
             //Task list heading font style - "Return Library Book"
             bodyLarge: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.w600,
                 color: Color(0xff0c120c)),
-
             //Task list description font style - "Gather overdue library books and return..."
             bodyMedium: TextStyle(
                 fontSize: 14.0,
                 fontWeight: FontWeight.w600,
                 color: Color(0xff565656)),
-
             //Task list icon text font style - "11:30 AM, 26/11/24"
             bodySmall: TextStyle(
                 fontSize: 12.0,
@@ -114,15 +105,7 @@ double horizontalPadding(BuildContext context) {
   return MediaQuery.of(context).size.width / 20;
 }
 
-double mainSpacing(BuildContext context) {
-  return MediaQuery.of(context).size.height / 18;
-}
-
-double taskSpacing(BuildContext context) { // 25
+double taskSpacing(BuildContext context) {
+  // TODO: Convert 25px into respected MediaQuery size 
   return MediaQuery.of(context).size.width / 20;
 }
-
-// final todosProvider =
-//     StateNotifierProvider<TodosNotifier, List<TodosModel>>((ref) {
-//   return TodosNotifier;
-// });

@@ -1,4 +1,5 @@
 import 'package:doable_todo_list_app/main.dart';
+import 'package:doable_todo_list_app/widgets/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -32,9 +33,7 @@ class HomePage extends ConsumerWidget {
                 ),
               ],
             ),
-            SizedBox(
-              height: mainSpacing(context),
-            ),
+            Spacing(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -53,7 +52,7 @@ class HomePage extends ConsumerWidget {
                       horizontal: MediaQuery.of(context).size.width / 15),
                   decoration: BoxDecoration(
                     border: Border.all(
-                        width: 2.0, color: Theme.of(context).shadowColor),
+                        width: 2.0, color: outlineColor),
                         borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width)
                   ),
                   child: Expanded(
