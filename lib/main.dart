@@ -6,7 +6,6 @@ import 'package:doable_todo_list_app/todos_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:doable_todo_list_app/todos_notifier.dart';
 
 final todosProvider =
     StateNotifierProvider<TodosNotifier, TodosState>((ref) => TodosNotifier());
@@ -21,12 +20,12 @@ Color descriptionColor = const Color(0xff565656);
 
 void main() {
   //status bar & navigation bar colors and themes
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Color(0xffFDFDFF),
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: whiteColor,
       statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: Color(0xffFDFDFF),
+      systemNavigationBarColor: whiteColor,
       systemNavigationBarIconBrightness: Brightness.dark,
-      systemNavigationBarDividerColor: Color(0xffD6D6D6)));
+      systemNavigationBarDividerColor: whiteColor));
 
   //Riverpod globally enabled
   runApp(
@@ -45,23 +44,27 @@ class DoableApp extends StatelessWidget {
       home: const HomePage(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+          //colors
+          splashColor: Colors.transparent,
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
           //font family
           fontFamily: "Inter",
           textTheme: const TextTheme(
             //Main heading font style - "Create to-do, Modify to-do"
             displayLarge: TextStyle(
-                fontSize: 40.0,
+                fontSize: 28.0,
                 fontWeight: FontWeight.w900,
                 color: Color(0xff0c120c)),
             //Subheading font style - "Today, Settings"
             displayMedium: TextStyle(
-                fontSize: 25.0,
-                fontWeight: FontWeight.bold,
+                fontSize: 20.0,
+                fontWeight: FontWeight.w600,
                 color: Color(0xff0c120c)),
             //Regular app font style - "Set Reminder, Daily, Save, License, ..."
             displaySmall: TextStyle(
-                fontSize: 17.0,
-                fontWeight: FontWeight.w600,
+                fontSize: 15.0,
+                fontWeight: FontWeight.w500,
                 color: Color(0xff0c120c)),
             //box heading font style - "Tell us about your task, Date & Time, Completion status, ..."
             labelSmall: TextStyle(
@@ -70,7 +73,7 @@ class DoableApp extends StatelessWidget {
                 color: Color(0xff565656)),
             //Task list heading font style - "Return Library Book"
             bodyLarge: TextStyle(
-                fontSize: 18.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.w600,
                 color: Color(0xff0c120c)),
             //Task list description font style - "Gather overdue library books and return..."
@@ -106,6 +109,6 @@ double horizontalPadding(BuildContext context) {
 }
 
 double taskSpacing(BuildContext context) {
-  // TODO: Convert 25px into respected MediaQuery size 
+  // TODO: Convert 25px into respected MediaQuery size
   return MediaQuery.of(context).size.width / 20;
 }

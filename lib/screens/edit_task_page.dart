@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:doable_todo_list_app/todos_notifier.dart';
 
 class EditTaskPage extends ConsumerWidget {
-  const EditTaskPage({Key? key}) : super(key: key);
+  const EditTaskPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
