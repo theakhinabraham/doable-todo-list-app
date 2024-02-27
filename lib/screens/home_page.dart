@@ -42,7 +42,12 @@ class HomePage extends ConsumerWidget {
                   "Today",
                   style: Theme.of(context).textTheme.displayMedium,
                 ),
-                Container(
+                TextButton(
+                  onPressed: () {
+                    //TODO: Filter todo tasks
+                  },
+                  style: TextButton.styleFrom(padding: const EdgeInsets.all(0)),
+                  child: Container(
                   height: MediaQuery.of(context).size.height / 15,
                   padding: EdgeInsets.symmetric(
                       horizontal: MediaQuery.of(context).size.width / 15),
@@ -66,6 +71,7 @@ class HomePage extends ConsumerWidget {
                       ),
                     ),
                   ),
+                ),
                 ),
               ],
             ),
