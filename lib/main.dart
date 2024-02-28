@@ -68,7 +68,7 @@ class DoableApp extends StatelessWidget {
                 color: Color(0xff0c120c)),
             //box heading font style - "Tell us about your task, Date & Time, Completion status, ..."
             labelSmall: TextStyle(
-                fontSize: 15.0,
+                fontSize: 13.0,
                 fontWeight: FontWeight.w600,
                 color: Color(0xff565656)),
             //Task list heading font style - "Return Library Book"
@@ -108,7 +108,9 @@ double horizontalPadding(BuildContext context) {
   return MediaQuery.of(context).size.width / 20;
 }
 
-double taskSpacing(BuildContext context) {
+EdgeInsets textFieldPadding(BuildContext context) {
   // TODO: Convert 25px into respected MediaQuery size
-  return MediaQuery.of(context).size.width / 20;
+  return EdgeInsets.symmetric(
+      horizontal: MediaQuery.of(context).size.width * 0.1,
+      vertical: MediaQuery.of(context).size.height * 0.025);
 }
