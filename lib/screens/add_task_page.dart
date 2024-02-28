@@ -1,7 +1,10 @@
 import 'package:doable_todo_list_app/main.dart';
+import 'package:doable_todo_list_app/widgets/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:doable_todo_list_app/todos_notifier.dart';
+import 'package:doable_todo_list_app/widgets/back_arrow.dart';
+import 'package:doable_todo_list_app/widgets/set_reminder.dart';
 
 class AddTaskPage extends ConsumerWidget {
   const AddTaskPage({super.key});
@@ -11,12 +14,25 @@ class AddTaskPage extends ConsumerWidget {
     final todos = ref.watch(todosProvider);
 
     return Scaffold(
-      body: SafeArea(child: Container(
+      body: SafeArea(
+        child: Container(
             padding: EdgeInsets.symmetric(
                 horizontal: horizontalPadding(context),
                 vertical: verticalPadding(context)),
-            child: const Column(
-              
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    const BackArrow(),
+                    Text(
+                      "Create to-do",
+                      style: Theme.of(context).textTheme.displayLarge,
+                    )
+                  ],
+                ),
+                const Spacing(),
+                const SetReminder(),
+              ],
             )),
       ),
     );

@@ -15,12 +15,10 @@ class TodayAndFilterButton extends StatelessWidget {
                       "Today",
                       style: Theme.of(context).textTheme.displayMedium,
                     ),
-                    TextButton(
-                      onPressed: () {
+                    GestureDetector(
+                      onTap: () {
                         //TODO: Filter todo tasks
                       },
-                      style: const ButtonStyle(
-                          padding: MaterialStatePropertyAll(EdgeInsets.all(0))),
                       child: Container(
                         height: MediaQuery.of(context).size.height * 0.04,
                         width: MediaQuery.of(context).size.width * 0.25,

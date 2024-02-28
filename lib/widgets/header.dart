@@ -14,11 +14,11 @@ class Header extends StatelessWidget {
                       "assets/trans_logo.svg",
                       height: MediaQuery.of(context).size.height * 0.035,
                     ),
-                    IconButton(
-                      onPressed: () {
+                    GestureDetector(
+                      onTap: () {
                         Navigator.pushNamed(context, 'settings');
                       },
-                      icon: SvgPicture.asset(
+                      child: SvgPicture.asset(
                         "assets/hamburger.svg",
                         height: MediaQuery.of(context).size.height * 0.025,
                       ),

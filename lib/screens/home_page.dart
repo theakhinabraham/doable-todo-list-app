@@ -5,7 +5,6 @@ import 'package:doable_todo_list_app/widgets/spacing.dart';
 import 'package:doable_todo_list_app/widgets/today_and_filter_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:doable_todo_list_app/todos_notifier.dart';
 
 class HomePage extends ConsumerWidget {
