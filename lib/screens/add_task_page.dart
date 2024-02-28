@@ -9,8 +9,7 @@ import 'package:doable_todo_list_app/widgets/small_spacing.dart';
 import 'package:doable_todo_list_app/widgets/text_box.dart';
 
 class AddTaskPage extends ConsumerWidget {
-  final String hintText;
-  const AddTaskPage(this.hintText, {super.key});
+  const AddTaskPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
