@@ -9,7 +9,7 @@
   <h3 align="center">Doable Todo List App</h3>
 
   <p align="center">
-    💡 An offline Flutter todo list app using Dart & SQLite Database with notification reminders & latest UI designs.
+    💡 An offline Flutter todo list app using Dart & Hive Database with notification reminders & latest UI designs.
     <br /> <br>
     <a href="https://github.com/theakhinabraham/doable-todo-list-app/wiki"><strong>Explore the Documentations»</strong></a>
     <br />
@@ -153,12 +153,12 @@ For more examples, please refer to the [Documentation](https://github.com/theakh
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Add task using button & swipe to delete task (`task_id`, `task_name`, `description`)
-- [ ] Add completion status: tick and untick (`status`)
+- [ ] Add task using button & swipe to delete task (`taskId`, `taskName`, `description`)
+- [ ] Add completion status: tick and untick (`isCompleted`)
 - [ ] Display tasks as `ListView`
 - [ ] Edit task on tap 
 - [ ] Completed tasks go to bottom of `ListView`
-- [ ] Add time & date using `cupertino_date_picker` (`time`, `date`)
+- [ ] Add time & date using `cupertino_date_picker` (`dueDateTime`)
 - [ ] Add repeat setting for daily, weekly and monthly (`repeat`)
 - [ ] Add notificaion reminder (`reminder`)
 - [ ] Delete completed tasks at 12:00 am daily
