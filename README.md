@@ -154,11 +154,11 @@ For more examples, please refer to the [Documentation](https://github.com/theakh
 ## Roadmap
 
 - [ ] Add task using button & swipe to delete task (`taskId`, `taskName`, `description`)
-- [ ] Add completion status: tick and untick (`status`)
+- [ ] Add completion status: tick and untick (`isCompleted`)
 - [ ] Display tasks as `ListView`
 - [ ] Edit task on tap 
 - [ ] Completed tasks go to bottom of `ListView`
-- [ ] Add time & date using `cupertino_date_picker` (`time`, `date`)
+- [ ] Add time & date using `cupertino_date_picker` (`dueDateTime`)
 - [ ] Add repeat setting for daily, weekly and monthly (`repeat`)
 - [ ] Add notificaion reminder (`reminder`)
 - [ ] Delete completed tasks at 12:00 am daily
