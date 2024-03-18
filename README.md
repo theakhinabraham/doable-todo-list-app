@@ -153,7 +153,7 @@ For more examples, please refer to the [Documentation](https://github.com/theakh
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Add task using button & swipe to delete task (`task_id`, `task_name`, `description`)
+- [ ] Add task using button & swipe to delete task (`taskId`, `taskName`, `description`)
 - [ ] Add completion status: tick and untick (`status`)
 - [ ] Display tasks as `ListView`
 - [ ] Edit task on tap 
