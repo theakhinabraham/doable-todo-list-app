@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class TextBox extends StatelessWidget {
   final String hintHeading;
 
-  const TextBox({super.key, required this.hintHeading});
+  const TextBox({super.key, required this.hintHeading, required controller});
 
   @override
   Widget build(BuildContext context) {

@@ -1,20 +1,23 @@
 import 'package:doable_todo_list_app/main.dart';
 import 'package:doable_todo_list_app/widgets/spacing.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:doable_todo_list_app/todos_notifier.dart';
 import 'package:doable_todo_list_app/widgets/back_arrow.dart';
 import 'package:doable_todo_list_app/widgets/set_reminder.dart';
 import 'package:doable_todo_list_app/widgets/small_spacing.dart';
 import 'package:doable_todo_list_app/widgets/text_box.dart';
 
-class AddTaskPage extends ConsumerWidget {
+class AddTaskPage extends StatefulWidget {
   const AddTaskPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // final todos = ref.watch(todosProvider);
+  State<AddTaskPage> createState() => _AddTaskPageState();
+}
 
+class _AddTaskPageState extends State<AddTaskPage> {
+  final TextEditingController titleController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -43,29 +46,13 @@ class AddTaskPage extends ConsumerWidget {
                   ),
                 ),
                 const SmallSpacing(),
-                const TextBox(hintHeading: "Title"),
+                TextBox(hintHeading: "Title", controller: titleController),
+                //TODO: Add more TextBox() and a submit button
+                //Save the data to variables
+                //Save the data to ObjectBox
               ],
             )),
       ),
     );
   }
 }
-
-/*
-final todos = watch(todosProvider); // Listen for changes
-final todosNotifier = context.read(todosProvider.notifier); // Access notifier
-
-final newTodo = Todo(taskName: 'New Task', ...);
-// Set other properties based on UI input
-todosNotifier.addTodo(newTodo);
-
-
-final todoToEdit = todos.firstWhere((todo) => todo.taskId == editedTodoId);
-todoToEdit.taskName = 'Updated Task Name';
-// Update other properties as needed
-todosNotifier.updateTodo(todoToEdit);
-
-
-final todoToDelete = todos.firstWhere((todo) => todo.taskId == deletedTodoId);
-todosNotifier.deleteTodo(todoToDelete);
-*/
