@@ -1,66 +1,61 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
+import 'package:doable_todo_list_app/db/models.dart';
+import 'package:doable_todo_list_app/objectbox.g.dart';
 
-class TodosModel {
-  final String title;
-  final String? description;
-  final int? date;
-  final int? time;
-  final bool? notify;
-  final bool? status;
-  final String? repeat;
+final storeProvider = Provider((ref) async {
+  final docsDir = await getApplicationDocumentsDirectory();
+  final store = await openStore(
+    directory: p.join(docsDir.path, "obx-example"),
+    model: getObjectBoxModel(),
+  );
+  return store;
+});
 
-  TodosModel({
-    required this.title,
-    this.description,
-    this.date,
-    this.time,
-    this.notify,
-    this.status,
-    this.repeat,
-  });
+final todosBox = FutureProvider<Box<Todo>>((ref) async {
+  final store = await ref.watch(storeProvider);
+  return store.box<Todo>();
+});
 
-  TodosModel copyWith({
-    String? title,
-    String? description,
-    int? date,
-    int? time,
-    bool? notify,
-    bool? status,
-    String? repeat,
-  }) {
-    return TodosModel(
-      title: title ?? this.title,
-      description: description ?? this.description,
-      date: date ?? this.date,
-      time: time ?? this.time,
-      notify: notify ?? this.notify,
-      status: status ?? this.status,
-      repeat: repeat ?? this.repeat,
-    );
+final todosProvider = StateNotifierProvider<TodosNotifier, List<Todo>>(
+  (ref) {
+    final box = ref.watch(todosBox);
+    return TodosNotifier([], box as Box<Todo>);
+  },
+);
+
+class TodosNotifier extends StateNotifier<List<Todo>> {
+  late final Box<Todo> todosBox;
+
+  TodosNotifier(super.initialTodos, this.todosBox);
+
+  void addTodo(Todo todo) {
+    todosBox.put(todo);
+    state = [...state, todo];
   }
-}
 
-class TodosState {
-  final List<TodosModel> todos;
-
-  const TodosState({
-    required this.todos,
-  });
-
-  TodosState copyWith({
-    List<TodosModel>? todos,
-  }) {
-    return TodosState(
-      todos: todos ?? this.todos,
-    );
+  void updateTodo(Todo updatedTodo) {
+    todosBox.put(updatedTodo);
+    state = [
+      for (final todo in state)
+        if (todo.taskId == updatedTodo.taskId) updatedTodo else todo
+    ];
   }
-}
 
-class TodosNotifier extends StateNotifier<TodosState> {
-  TodosNotifier() : super(const TodosState(todos: []));
-  //TODO: add functions: add, remove, edit, toggle
+  void deleteTodo(Todo todo) {
+    todosBox.remove(todo.taskId);
+    state = state.where((t) => t.taskId != todo.taskId).toList();
+  }
 
-  void addTodo(TodosModel todo) {
-    state = state.copyWith(todos: [...state.todos, todo]);
+  List<Todo> searchTodos(String query) {
+    return state
+        .where(
+            (todo) => todo.taskName.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+  }
+
+  List<Todo> filterTodos(bool isCompleted) {
+    return state.where((todo) => todo.isCompleted == isCompleted).toList();
   }
 }

@@ -8,7 +8,7 @@ class SettingsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final todos = ref.watch(todosProvider);
+    // final todos = ref.watch(todosProvider);
 
     return const Scaffold();
   }

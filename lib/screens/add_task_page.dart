@@ -13,7 +13,7 @@ class AddTaskPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final todos = ref.watch(todosProvider);
+    // final todos = ref.watch(todosProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -50,3 +50,22 @@ class AddTaskPage extends ConsumerWidget {
     );
   }
 }
+
+/*
+final todos = watch(todosProvider); // Listen for changes
+final todosNotifier = context.read(todosProvider.notifier); // Access notifier
+
+final newTodo = Todo(taskName: 'New Task', ...);
+// Set other properties based on UI input
+todosNotifier.addTodo(newTodo);
+
+
+final todoToEdit = todos.firstWhere((todo) => todo.taskId == editedTodoId);
+todoToEdit.taskName = 'Updated Task Name';
+// Update other properties as needed
+todosNotifier.updateTodo(todoToEdit);
+
+
+final todoToDelete = todos.firstWhere((todo) => todo.taskId == deletedTodoId);
+todosNotifier.deleteTodo(todoToDelete);
+*/

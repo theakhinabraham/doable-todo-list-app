@@ -1,3 +1,4 @@
+import 'package:doable_todo_list_app/db/models.dart';
 import 'package:doable_todo_list_app/screens/add_task_page.dart';
 import 'package:doable_todo_list_app/screens/edit_task_page.dart';
 import 'package:doable_todo_list_app/screens/home_page.dart';
@@ -6,9 +7,6 @@ import 'package:doable_todo_list_app/todos_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final todosProvider =
-    StateNotifierProvider<TodosNotifier, TodosState>((ref) => TodosNotifier());
 
 //Colors
 Color blackColor = const Color(0xff0c120c);
