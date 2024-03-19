@@ -37,7 +37,8 @@ dependencies:
   flutter_svg: ^2.0.10+1
   objectbox: ^2.5.1
   objectbox_flutter_libs: any
-  path_provider_android: ^2.2.2
+  path: ^1.8.3
+  path_provider: ^2.1.2
 
 dev_dependencies:
   flutter_test:
