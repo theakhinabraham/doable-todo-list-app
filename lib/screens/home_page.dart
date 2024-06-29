@@ -25,14 +25,14 @@ class _HomePageState extends State<HomePage> {
               horizontal: horizontalPadding(context),
               vertical: verticalPadding(context),
             ),
-            child: const Column(
+            child: Column(
               children: [
-                Header(),
-                Spacing(),
-                TodayAndFilterButton(),
+                const Header(),
+                const Spacing(),
+                const TodayAndFilterButton(),
                 //Filter todo tasks
                 //File location: widgets/todayAndFilterButton.dart
-                Spacing(),
+                const Spacing(),
                 //TODO: Add List of all tasks in the mobile device
                 //If tasks are empty, show text
               ],

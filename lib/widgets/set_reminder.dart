@@ -26,25 +26,20 @@ class SetReminder extends StatelessWidget {
                           color: blackColor,
                           borderRadius: BorderRadius.circular(
                               MediaQuery.of(context).size.width)),
-                      child: Expanded(
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.5,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Text(
-                                "Set Reminder",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .displaySmall!
-                                    .copyWith(color: whiteColor, fontSize: 13),
-                              ),
-                              SvgPicture.asset("assets/bell_white.svg",
-                                  height: MediaQuery.of(context).size.height *
-                                      0.014),
-                            ],
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            "Set Reminder",
+                            style: Theme.of(context)
+                                .textTheme
+                                .displaySmall!
+                                .copyWith(color: whiteColor, fontSize: 13),
                           ),
-                        ),
+                          SvgPicture.asset("assets/bell_white.svg",
+                              height: MediaQuery.of(context).size.height *
+                                  0.014),
+                        ],
                       ),
                     ),
                   ),
