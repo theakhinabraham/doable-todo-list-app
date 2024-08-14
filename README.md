@@ -22,7 +22,7 @@
 <a href="https://github.com/theakhinabraham/doable-todo-list-app/issues">![GitHub contributors](https://img.shields.io/github/contributors/theakhinabraham/doable-todo-list-app)
 <a href="https://github.com/theakhinabraham/doable-todo-list-app">![GitHub stars](https://img.shields.io/github/stars/theakhinabraham/doable-todo-list-app?style=social)
 <a href="https://github.com/theakhinabraham/doable-todo-list-app">![GitHub forks](https://img.shields.io/github/forks/theakhinabraham/doable-todo-list-app?style=social)
-<a href="https://twitter.com/theakhin">![Twitter Follow](https://img.shields.io/twitter/follow/theakhin?style=social)</a>
+<a href="https://twitter.com/akhinabr">![Twitter Follow](https://img.shields.io/twitter/follow/theakhin?style=social)</a>
 
 </div>
 
@@ -305,7 +305,7 @@ Distributed under the MIT License. Click [LICENSE.md](https://github.com/theakhi
 <!-- CONTACT -->
 ## Contact
 
-Akhin Abraham - [twitter.com/theakhin](https://twitter.com/theakhin) - theakhinabraham@gmail.com
+Akhin Abraham - [twitter.com/akhinabr](https://twitter.com/akhinabr) - theakhinabraham@gmail.com
 
 Repository Link: [https://github.com/theakhinabraham/doable-todo-list-app](https://github.com/theakhinabraham/doable-todo-list-app)
 
