@@ -1,4 +1,3 @@
-import 'package:doable_todo_list_app/objectbox.dart';
 import 'package:doable_todo_list_app/screens/add_task_page.dart';
 import 'package:doable_todo_list_app/screens/edit_task_page.dart';
 import 'package:doable_todo_list_app/screens/home_page.dart';
@@ -14,14 +13,10 @@ Color iconColor = const Color(0xff565656);
 Color outlineColor = const Color(0xffD6D6D6);
 Color descriptionColor = const Color(0xff565656);
 
-// Declare the ObjectBox variable
-late ObjectBox objectbox;
+// TODO: ADD A .env file
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter is ready
-
-  // Initialize ObjectBox
-  objectbox = await ObjectBox.create();
 
   //status bar & navigation bar colors and themes
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
