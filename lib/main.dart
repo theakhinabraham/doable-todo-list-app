@@ -14,7 +14,6 @@ Color outlineColor = const Color(0xffD6D6D6);
 Color descriptionColor = const Color(0xff565656);
 
 // TODO: ADD A .env file
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter is ready
 
@@ -108,3 +107,4 @@ EdgeInsets textFieldPadding(BuildContext context) {
       horizontal: MediaQuery.of(context).size.width * 0.1,
       vertical: MediaQuery.of(context).size.height * 0.025);
 }
+
