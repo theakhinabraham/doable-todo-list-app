@@ -6,6 +6,7 @@ import 'package:doable_todo_list_app/widgets/back_arrow.dart';
 import 'package:doable_todo_list_app/widgets/set_reminder.dart';
 import 'package:doable_todo_list_app/widgets/small_spacing.dart';
 import 'package:doable_todo_list_app/widgets/text_box.dart';
+import 'package:flutter_svg/svg.dart';
 
 class AddTaskPage extends StatefulWidget {
   const AddTaskPage({super.key});
@@ -51,11 +52,27 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   ),
                 ),
                 const SmallSpacing(),
-                TextBox(hintHeading: "Title", controller: titleController),
+                TextField(
+                  controller: titleController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(45.0),
+                    ),
+                    prefixIcon: Icon(Icons.title_outlined),
+                    hintText: "Title"
+                  ),
+                ),
                 const SmallSpacing(),
-                TextBox(
-                    hintHeading: "Description",
-                    controller: descriptionController),
+                TextField(
+                  controller: descriptionController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(45.0),
+                    ),
+                    prefixIcon: Icon(Icons.description_outlined),
+                    hintText: "Description"
+                  ),
+                ),
                 const Spacing(),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -64,14 +81,32 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     style: Theme.of(context).textTheme.labelSmall,
                   ),
                 ),
-                IconTextBox(
-                    hintHeading: "Set Date",
-                    controller: dateController,
-                    iconLocation: 'assets/calendar.svg'),
-                IconTextBox(
-                    hintHeading: "Set Time",
-                    controller: timeController,
-                    iconLocation: 'assets/clock.svg'),
+
+                SizedBox(height: 5,),
+
+                TextField(
+                  controller: dateController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(45.0),
+                    ),
+                    prefixIcon: Icon(Icons.calendar_month_outlined),
+                    hintText: "Select Date"
+                  ),
+                ),
+
+                SizedBox(height: 10,),
+
+                TextField(
+                  controller: timeController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(45.0),
+                    ),
+                    prefixIcon: Icon(Icons.access_time_outlined),
+                    hintText: "Select Time"
+                  ),
+                ),
                 //TODO: Add more TextBox() and a submit button
                 //Save the data to variables
                 //Save the data to ObjectBox

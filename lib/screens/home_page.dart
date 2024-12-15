@@ -1,9 +1,11 @@
 import 'package:doable_todo_list_app/main.dart';
+import 'package:doable_todo_list_app/screens/settings_page.dart';
 import 'package:doable_todo_list_app/widgets/add_task_button.dart';
 import 'package:doable_todo_list_app/widgets/header.dart';
 import 'package:doable_todo_list_app/widgets/spacing.dart';
 import 'package:doable_todo_list_app/widgets/today_and_filter_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,6 +19,23 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: SvgPicture.asset(
+                        "assets/trans_logo.svg",
+                      ),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings_outlined),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsPage()));
+            },
+          ),
+        ],
+
+      ),
         floatingActionButton: const AddTaskButton(),
         body: SafeArea(
           child: Padding(
@@ -27,8 +46,6 @@ class _HomePageState extends State<HomePage> {
             ),
             child: Column(
               children: [
-                const Header(),
-                const Spacing(),
                 const TodayAndFilterButton(),
                 //Filter todo tasks
                 //File location: widgets/todayAndFilterButton.dart
