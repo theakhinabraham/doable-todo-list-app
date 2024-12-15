@@ -10,15 +10,10 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.5),
-        title: Padding(
-          padding: const EdgeInsets.only(left: 100),
-          child: currentWidth < 600 ? Text(
+        title: Text(
               'Settings',
-              style: TextStyle(
-                fontWeight: FontWeight.w500
-                ),
-              ) : null,
-        ),
+              style: Theme.of(context).textTheme.displayLarge,
+              ),
       ),
 
       body: Column(
@@ -79,7 +74,9 @@ class SettingsPage extends StatelessWidget {
 
                    SizedBox(width: 180),
                    Icon(
-                    Icons.arrow_forward_rounded, 
+                    Icons.delete_outlined, 
+                    color: Colors.white,
+                    size: 25,
                     ),
                   ],
                 ),
@@ -98,7 +95,46 @@ class SettingsPage extends StatelessWidget {
               style: TextStyle(
               ),
              ),
-             
+
+             // Bottom text
+             Expanded(
+               child: Align(
+                alignment: Alignment.bottomCenter,
+                 child: Padding(
+                   padding: const EdgeInsets.only(left: 20, right: 20),
+                   child: Row(
+                     children: [
+                   
+                      // License
+                       Expanded(
+                         child: Align(
+                          alignment: Alignment.bottomLeft,
+                           child: SelectableText(
+                            "License: MIT",
+                            style: TextStyle(
+                            ),
+                           ),
+                         ),
+                       ),
+                   
+                       SizedBox(width: 20,),
+                   
+                       // Version
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: SelectableText(
+                              "Version: 1.0.0",
+                              style: TextStyle(
+                              ),
+                            ),
+                          ),
+                        ),
+                     ],
+                   ),
+                 ),
+               ),
+             ),
         ],
       ),
     );
