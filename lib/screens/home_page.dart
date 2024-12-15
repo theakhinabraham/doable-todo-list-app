@@ -21,17 +21,20 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
-          padding: const EdgeInsets.only(left: 10),
+          padding: const EdgeInsets.only(left: 15),
           child: SvgPicture.asset(
                         "assets/trans_logo.svg",
                       ),
         ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.settings_outlined),
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsPage()));
-            },
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: IconButton(
+              icon: Icon(Icons.settings_outlined),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsPage()));
+              },
+            ),
           ),
         ],
 
@@ -41,8 +44,7 @@ class _HomePageState extends State<HomePage> {
           child: Padding(
             //SafeArea
             padding: EdgeInsets.symmetric(
-              horizontal: horizontalPadding(context),
-              vertical: verticalPadding(context),
+              horizontal: 15,
             ),
             child: Column(
               children: [

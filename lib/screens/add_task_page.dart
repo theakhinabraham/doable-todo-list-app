@@ -27,8 +27,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       body: SafeArea(
         child: Container(
             padding: EdgeInsets.symmetric(
-                horizontal: horizontalPadding(context),
-                vertical: verticalPadding(context)),
+                horizontal: 15),
             child: Column(
               children: [
                 Row(
