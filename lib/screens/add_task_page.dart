@@ -16,6 +16,10 @@ class AddTaskPage extends StatefulWidget {
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
+  String _titleValue = '';
+  String _descriptionValue = '';
+  String _dateValue = '';
+  String _timeValue = '';
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
@@ -27,6 +31,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       body: SafeArea(
         child: Container(
             padding: EdgeInsets.symmetric(
+              vertical: 20,
                 horizontal: 15),
             child: Column(
               children: [
@@ -60,6 +65,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     prefixIcon: Icon(Icons.title_outlined),
                     hintText: "Title"
                   ),
+                  onChanged: (value) {
+                    setState(() {
+                      _titleValue = value;
+                    });
+                  },
                 ),
                 const SmallSpacing(),
                 TextField(
@@ -71,6 +81,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     prefixIcon: Icon(Icons.description_outlined),
                     hintText: "Description"
                   ),
+                  onChanged: (value) {
+                    setState(() {
+                      _descriptionValue = value;
+                    });
+                  },
                 ),
                 const Spacing(),
                 Align(
@@ -92,6 +107,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     prefixIcon: Icon(Icons.calendar_month_outlined),
                     hintText: "Select Date"
                   ),
+                  onChanged: (value) {
+                    setState(() {
+                      _dateValue = value;
+                    });
+                  },
                 ),
 
                 SizedBox(height: 10,),
@@ -105,7 +125,32 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     prefixIcon: Icon(Icons.access_time_outlined),
                     hintText: "Select Time"
                   ),
+                  onChanged: (value) {
+                    setState(() {
+                      _timeValue = value;
+                    });
+                  },
                 ),
+
+                const Spacing(),
+
+                ElevatedButton(
+                  onPressed: () {}, 
+                  child: Text(
+                    "Create",
+                    style: TextStyle(
+                      color: Colors.white
+                    ),
+                    ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(45.0),
+                    ),
+                    fixedSize: Size(200, 50),
+                    shadowColor: Colors.white,
+                  ),
+                  ),
                 //TODO: Add more TextBox() and a submit button
                 //Save the data to variables
                 //Save the data to ObjectBox
@@ -113,5 +158,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
             )),
       ),
     );
+  }
+  @override
+  void dispose() {
+    titleController.dispose();
+    descriptionController.dispose();
+    dateController.dispose();
+    timeController.dispose();
+    super.dispose();
   }
 }
