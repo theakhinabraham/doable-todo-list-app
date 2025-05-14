@@ -125,7 +125,7 @@ Steps to install code and app into your local device (and run app on emulator or
 5. Clone your copy of this repo using `git clone link-you-copied-in-step-2`
 
   ```
-  git clone https://github.com/your_username_/doable-todo-list-app.git
+  git clone https://github.com/theakhinabraham/doable-todo-list-app.git
   ```
 <br>
 
