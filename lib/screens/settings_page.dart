@@ -1,4 +1,3 @@
-import 'package:doable_todo_list_app/widgets/back_arrow.dart';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatelessWidget {
