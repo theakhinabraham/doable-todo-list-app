@@ -9,7 +9,7 @@
   <h3 align="center">Doable Todo List App</h3>
 
   <p align="center">
-    💡 An offline Flutter todo list app using Dart & Hive Database with notification reminders & latest UI designs.
+    💡 An offline Flutter todo list app using Dart & SQLite Database with notification reminders & latest UI designs.
     <br /> <br>
     <a href="https://github.com/theakhinabraham/doable-todo-list-app/wiki"><strong>Explore the Documentations»</strong></a>
     <br />
