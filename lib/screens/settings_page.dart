@@ -262,7 +262,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     _SocialIconButton(
                       asset: 'assets/linkedin.svg',
                       tooltip: 'LinkedIn',
-                      onTap: () => _openUrl('https://www.linkedin.com/in/akhinabr'),
+                      onTap: () => _openUrl('https://www.linkedin.com/in/theakhinabraham'),
                     ),
                   ],
                 ),
