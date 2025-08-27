@@ -312,23 +312,27 @@ class _AddTaskPageState extends State<AddTaskPage> {
         ),
       ),
       // Save button fixed to bottom visually via a large button in bottomNavigationBar
-      bottomNavigationBar: SafeArea(
-        //minimum: _screenHPad.add(const EdgeInsets.only(bottom: 16)),
-        child: SizedBox(
-          height: 56,
-          child: FilledButton(
-            style: FilledButton.styleFrom(
-              backgroundColor: const Color(0xFF3B82F6), // Blue 500
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+        child: SafeArea(
+
+          //minimum: _screenHPad.add(const EdgeInsets.only(bottom: 16)),
+          child: SizedBox(
+            height: 56,
+            child: FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: const Color(0xFF3B82F6), // Blue 500
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                textStyle: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                ),
               ),
-              textStyle: const TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: 16,
-              ),
+              onPressed: _save,
+              child: const Text('Save'),
             ),
-            onPressed: _save,
-            child: const Text('Save'),
           ),
         ),
       ),

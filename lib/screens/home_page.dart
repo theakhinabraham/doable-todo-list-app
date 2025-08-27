@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart'; // for DateFormat [web:146][web:156]
 
-// Data layer
 import 'package:doable_todo_list_app/data/task_dao.dart';
 
-// UI model used by the widget (mapped from DB rows)
+/// UI-facing model used on this page (mapped from DB rows).
 class Task {
   Task({
     required this.id,
@@ -20,10 +20,10 @@ class Task {
   final int id;
   String title;
   String? description;
-  String? time; // "11:30 AM"
-  String? date; // "26/11/24"
+  String? time; // e.g., "11:30 AM"
+  String? date; // e.g., "26/11/24"
   bool hasNotification;
-  String? repeatRule; // "Daily" / "Weekly" / etc.
+  String? repeatRule; // e.g., "Daily", "Weekly", "Monthly", "Weekly:[1,2,4]"
   bool completed;
 }
 
@@ -34,17 +34,70 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // ---- Data from SQLite rendered by the UI ----
   final List<Task> _tasks = [];
+
+  // ---- Filter state ----
+  DateTime? _fltDate;        // match by formatted dd/MM/yy vs task.date
+  TimeOfDay? _fltTime;       // match by formatted h:mm a vs task.time
+  bool? _fltCompleted;       // true=completed, false=incomplete, null=any
+  String? _fltRepeat;        // "Daily"|"Weekly"|"Monthly"|null=any
+  bool? _fltReminder;        // true=hasNotification, false=no, null=any
+
+  String _fmtDate(DateTime d) => DateFormat('dd/MM/yy').format(d); // [web:146]
+  String _fmtTime(TimeOfDay t) =>
+      DateFormat('h:mm a').format(DateTime(0, 1, 1, t.hour, t.minute)); // [web:146]
+
+  // Filtered + ordered (incomplete first, completed last)
+  List<Task> get _filteredTasks {
+    Iterable<Task> it = _tasks;
+
+    if (_fltDate != null) {
+      final d = _fmtDate(_fltDate!);
+      it = it.where((t) => (t.date ?? '') == d);
+    }
+    if (_fltTime != null) {
+      final tm = _fmtTime(_fltTime!);
+      it = it.where((t) => (t.time ?? '') == tm);
+    }
+    if (_fltCompleted != null) {
+      it = it.where((t) => t.completed == _fltCompleted);
+    }
+    if (_fltRepeat != null) {
+      it = it.where((t) {
+        final r = (t.repeatRule ?? '').trim();
+        if (r.isEmpty) return false;
+        if (_fltRepeat == 'Weekly') return r.startsWith('Weekly');
+        return r == _fltRepeat;
+      });
+    }
+    if (_fltReminder != null) {
+      it = it.where((t) => t.hasNotification == _fltReminder);
+    }
+
+    final a = it.where((t) => !t.completed).toList();
+    final b = it.where((t) => t.completed).toList();
+    return [...a, ...b];
+  }
+
+  void _clearFilters() {
+    setState(() {
+      _fltDate = null;
+      _fltTime = null;
+      _fltCompleted = null;
+      _fltRepeat = null;
+      _fltReminder = null;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    _init();
+    _init(); // initial DB load
   }
 
   Future<void> _init() async {
-    // Optional: seed once (comment out after first run)
-    // await TaskDao.seedDemo();
+    // await TaskDao.seedDemo(); // optional first-run seeding
     await _load();
   }
 
@@ -71,29 +124,19 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  List<Task> get _sortedTasks {
-    // DAO already orders incomplete first; this is a defensive fallback.
-    final a = _tasks.where((t) => !t.completed).toList();
-    final b = _tasks.where((t) => t.completed).toList();
-    return [...a, ...b];
-    // Reference ordering approach matches DB guidance. [1][9]
-  }
-
   Future<void> _toggle(Task t) async {
     await TaskDao.toggleCompleted(t.id, !t.completed);
     await _load();
-    // Toggling and reloading after pop is a common pattern. [1]
   }
 
   Future<void> _delete(Task t) async {
     await TaskDao.delete(t.id);
     await _load();
-    // Deleting via DAO then refreshing list. [1][9]
   }
 
   void _openSettings() {
-    Navigator.of(context).pushNamed('/settings');
-    // Standard named-routing usage. [11][12]
+    // Ensure the route name matches your MaterialApp routes
+    Navigator.of(context).pushNamed('settings');
   }
 
   double verticalPadding(BuildContext context) =>
@@ -101,13 +144,206 @@ class _HomePageState extends State<HomePage> {
   double horizontalPadding(BuildContext context) =>
       MediaQuery.of(context).size.width * 0.05;
 
+  // ---- Filter bottom sheet ----
+  Future<void> _openFilterSheet() async {
+    await showModalBottomSheet<void>( // [web:146][web:148]
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) {
+        return StatefulBuilder( // local state inside sheet [web:145][web:154][web:158]
+          builder: (context, setSheetState) {
+            Future<void> pickDate() async {
+              final now = DateTime.now();
+              final picked = await showDatePicker(
+                context: context,
+                initialDate: _fltDate ?? now,
+                firstDate: DateTime(now.year - 1),
+                lastDate: DateTime(now.year + 5),
+                helpText: 'Select date',
+              );
+              if (picked != null) setSheetState(() => _fltDate = picked);
+            }
+
+            Future<void> pickTime() async {
+              final picked = await showTimePicker(
+                context: context,
+                initialTime: _fltTime ?? TimeOfDay.now(),
+                helpText: 'Select time',
+              );
+              if (picked != null) setSheetState(() => _fltTime = picked);
+            }
+
+            Widget chip(String label, bool selected, VoidCallback onTap) {
+              final bg = selected ? Colors.black : Colors.white;
+              final fg = selected ? Colors.white : Colors.black;
+              return Material(
+                color: bg,
+                shape: StadiumBorder(side: BorderSide(color: Colors.grey.shade300)),
+                child: InkWell(
+                  onTap: onTap,
+                  customBorder: const StadiumBorder(),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    child: Text(label, style: TextStyle(color: fg, fontWeight: FontWeight.w700)),
+                  ),
+                ),
+              );
+            }
+
+            final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+
+            return Padding(
+              padding: EdgeInsets.only(bottom: bottomInset),
+              child: SafeArea(
+                top: false,
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Center(
+                        child: Container(
+                          width: 44,
+                          height: 4,
+                          decoration: BoxDecoration(
+                            color: Colors.black12,
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      const Text('Date & Time',
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.black)),
+                      const SizedBox(height: 12),
+
+                      _PickerRow(
+                        icon: Icons.calendar_today,
+                        label: _fltDate != null ? _fmtDate(_fltDate!) : 'Set date',
+                        onTap: pickDate,
+                        onClear: _fltDate != null ? () => setSheetState(() => _fltDate = null) : null,
+                      ),
+                      const SizedBox(height: 12),
+                      _PickerRow(
+                        icon: Icons.access_time,
+                        label: _fltTime != null ? _fmtTime(_fltTime!) : 'Set time',
+                        onTap: pickTime,
+                        onClear: _fltTime != null ? () => setSheetState(() => _fltTime = null) : null,
+                      ),
+
+                      const SizedBox(height: 20),
+                      const Text('Completion Status',
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.black)),
+                      const SizedBox(height: 12),
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: [
+                          chip('Completed', _fltCompleted == true,
+                                  () => setSheetState(() => _fltCompleted = true)),
+                          chip('Incomplete', _fltCompleted == false,
+                                  () => setSheetState(() => _fltCompleted = false)),
+                          chip('Any', _fltCompleted == null,
+                                  () => setSheetState(() => _fltCompleted = null)),
+                        ],
+                      ),
+
+                      const SizedBox(height: 20),
+                      const Text('Repeat',
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.black)),
+                      const SizedBox(height: 12),
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: [
+                          chip('Daily', _fltRepeat == 'Daily',
+                                  () => setSheetState(() => _fltRepeat = 'Daily')),
+                          chip('Weekly', _fltRepeat == 'Weekly',
+                                  () => setSheetState(() => _fltRepeat = 'Weekly')),
+                          chip('Monthly', _fltRepeat == 'Monthly',
+                                  () => setSheetState(() => _fltRepeat = 'Monthly')),
+                          chip('No repeat', _fltRepeat == null,
+                                  () => setSheetState(() => _fltRepeat = null)),
+                        ],
+                      ),
+
+                      const SizedBox(height: 20),
+                      const Text('Reminders',
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.black)),
+                      const SizedBox(height: 12),
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: [
+                          chip('On', _fltReminder == true,
+                                  () => setSheetState(() => _fltReminder = true)),
+                          chip('Off', _fltReminder == false,
+                                  () => setSheetState(() => _fltReminder = false)),
+                          chip('Any', _fltReminder == null,
+                                  () => setSheetState(() => _fltReminder = null)),
+                        ],
+                      ),
+
+                      const SizedBox(height: 24),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: FilledButton(
+                          style: FilledButton.styleFrom(
+                            backgroundColor: const Color(0xFF3B82F6),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            textStyle: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context); // close sheet
+                            setState(() {}); // apply filters to list
+                          },
+                          child: const Text('Apply Filter'),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Center(
+                        child: TextButton(
+                          onPressed: () {
+                            setSheetState(() {
+                              _fltDate = null;
+                              _fltTime = null;
+                              _fltCompleted = null;
+                              _fltRepeat = null;
+                              _fltReminder = null;
+                            });
+                          },
+                          child: const Text('Clear selections'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: [
-          // Two-row header
+          // Header
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.fromLTRB(
@@ -119,7 +355,7 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Row 1: Logo left, settings right
+                  // Row 1: Logo + Settings
                   Row(
                     children: [
                       SvgPicture.asset('assets/trans_logo.svg', height: 28),
@@ -134,7 +370,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   const SizedBox(height: 24),
-                  // Row 2: Today + Filter chip
+                  // Row 2: Today + Filter
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -143,20 +379,17 @@ class _HomePageState extends State<HomePage> {
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w800,
-                          fontSize: 24, // headline-ish
+                          fontSize: 24,
                           height: 1.3,
                         ),
                       ),
                       const Spacer(),
                       ConstrainedBox(
-                        constraints:
-                        const BoxConstraints(minWidth: 96, minHeight: 48),
+                        constraints: const BoxConstraints(minWidth: 96, minHeight: 48),
                         child: _FilterChipButton(
                           label: 'Filter',
-                          onTap: () {
-                            // TODO: open filter sheet
-                          },
-                          height: 36, // visual height
+                          onTap: _openFilterSheet, // open bottom sheet
+                          height: 36,
                         ),
                       ),
                     ],
@@ -166,15 +399,14 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
-          // Task list
+          // Task list (uses filtered tasks)
           SliverList.separated(
             itemBuilder: (context, index) {
-              final task = _sortedTasks[index];
+              final task = _filteredTasks[index];
               return Dismissible(
                 key: ValueKey(task.id),
-                direction: task.completed
-                    ? DismissDirection.endToStart
-                    : DismissDirection.none,
+                direction:
+                task.completed ? DismissDirection.endToStart : DismissDirection.none,
                 background: const SizedBox.shrink(),
                 secondaryBackground: Container(
                   alignment: Alignment.centerRight,
@@ -184,10 +416,19 @@ class _HomePageState extends State<HomePage> {
                 ),
                 confirmDismiss: (_) async => task.completed,
                 onDismissed: (_) => _delete(task),
-                child: _TaskTile(task: task, onToggle: () => _toggle(task)),
+                child: InkWell(
+                  onTap: () async {
+                    final result = await Navigator.pushNamed(
+                      context,
+                      'edit_task',
+                      arguments: task,
+                    );
+                    if (result == true) await _load();
+                  },
+                  child: _TaskTile(task: task, onToggle: () => _toggle(task)),
+                ),
               );
             },
-            // Spacious separators: gap + subtle divider + gap
             separatorBuilder: (_, __) => const Padding(
               padding: EdgeInsets.only(left: 72, right: 16),
               child: Column(
@@ -198,19 +439,15 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            itemCount: _sortedTasks.length,
+            itemCount: _filteredTasks.length,
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 96)),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          // Navigate to add task and refresh on success
           final saved = await Navigator.pushNamed(context, 'add_task');
-          if (saved == true) {
-            await _load();
-          }
-          // Named routes with returning a result is the idiomatic approach. [11][12]
+          if (saved == true) await _load();
         },
         backgroundColor: Colors.black,
         shape: const CircleBorder(),
@@ -236,7 +473,6 @@ class _FilterChipButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Keeps at least 48x48 tap target; visual container is 36 tall
     return ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 48, minWidth: 48),
       child: Material(
@@ -255,7 +491,7 @@ class _FilterChipButton extends StatelessWidget {
                   Text(
                     label,
                     style: const TextStyle(
-                      fontSize: 14, // labelLarge-ish
+                      fontSize: 14,
                       fontWeight: FontWeight.w700,
                       height: 1.3,
                       color: Colors.black87,
@@ -266,10 +502,8 @@ class _FilterChipButton extends StatelessWidget {
                     'assets/filter.svg',
                     height: 18,
                     width: 18,
-                    colorFilter: const ColorFilter.mode(
-                      Colors.black87,
-                      BlendMode.srcIn,
-                    ),
+                    colorFilter:
+                    const ColorFilter.mode(Colors.black87, BlendMode.srcIn),
                   ),
                 ],
               ),
@@ -295,7 +529,7 @@ class _TaskTile extends StatelessWidget {
     final isDone = task.completed;
 
     final titleStyle = TextStyle(
-      fontSize: 16, // bodyLarge/titleMedium
+      fontSize: 16,
       height: 1.5,
       fontWeight: FontWeight.w800,
       decoration: isDone ? TextDecoration.lineThrough : TextDecoration.none,
@@ -303,7 +537,6 @@ class _TaskTile extends StatelessWidget {
     );
 
     return Padding(
-      // slightly larger vertical padding for breathing room
       padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -335,7 +568,7 @@ class _IncompleteContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final metaStyle = TextStyle(
-      fontSize: 12, // label/bodySmall
+      fontSize: 12,
       height: 1.33,
       color: Colors.blueGrey.shade600,
       fontWeight: FontWeight.w600,
@@ -370,7 +603,7 @@ class _IncompleteContent extends StatelessWidget {
             child: Text(
               task.description!,
               style: TextStyle(
-                fontSize: 14, // bodyMedium
+                fontSize: 14,
                 height: 1.4,
                 color: Colors.blueGrey.shade700,
               ),
@@ -431,7 +664,65 @@ class _CircleCheck extends StatelessWidget {
           ),
           color: completed ? Colors.blue : Colors.transparent,
         ),
-        child: completed ? const Icon(Icons.check, size: 16, color: Colors.white) : null,
+        child: completed
+            ? const Icon(Icons.check, size: 16, color: Colors.white)
+            : null,
+      ),
+    );
+  }
+}
+
+// Compact list-style picker row used in the filter sheet.
+class _PickerRow extends StatelessWidget {
+  const _PickerRow({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    this.onClear,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+  final VoidCallback? onClear;
+
+  @override
+  Widget build(BuildContext context) {
+    final hasValue = label != 'Set date' && label != 'Set time';
+    return Material(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: Colors.grey.shade300),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          child: Row(
+            children: [
+              Icon(icon, size: 18, color: Colors.black87),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    color: hasValue ? Colors.black : Colors.black54,
+                    fontWeight: hasValue ? FontWeight.w600 : FontWeight.w500,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+              if (hasValue && onClear != null)
+                IconButton(
+                  tooltip: 'Clear',
+                  icon: const Icon(Icons.close, size: 20, color: Colors.black54),
+                  onPressed: onClear,
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }

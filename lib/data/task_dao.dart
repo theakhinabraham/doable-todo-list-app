@@ -48,6 +48,11 @@ class TaskDao {
     return TaskEntity.fromMap(rows.first);
   }
 
+  static Future<int> clearAll() async {
+    final db = await DatabaseService.instance();
+    return db.delete('tasks');
+  }
+
   // Optional convenience for seeding demo data
   static Future<void> seedDemo() async {
     final db = await DatabaseService.instance();
