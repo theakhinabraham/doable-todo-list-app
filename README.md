@@ -11,7 +11,6 @@
   <p align="center">
     💡 An offline Flutter todo list app using Dart & SQLite Database with notification reminders & latest UI designs.
     <br /> <br>
-    <a href="https://github.com/theakhinabraham/doable-todo-list-app/wiki"><strong>Explore the Documentations»</strong></a>
     <br />
     <a href="https://github.com/theakhinabraham/doable-todo-list-app/issues">Report Bugs</a>
     ·
@@ -23,6 +22,11 @@
 <a href="https://github.com/theakhinabraham/doable-todo-list-app">![GitHub stars](https://img.shields.io/github/stars/theakhinabraham/doable-todo-list-app?style=social)
 <a href="https://github.com/theakhinabraham/doable-todo-list-app">![GitHub forks](https://img.shields.io/github/forks/theakhinabraham/doable-todo-list-app?style=social)
 <a href="https://twitter.com/akhinabr">![Twitter Follow](https://img.shields.io/twitter/follow/akhinabr?style=social)</a>
+<br>
+[![Flutter](https://img.shields.io/badge/Flutter-3.0+-02569B?style=flat&logo=flutter)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-3.2.6+-0175C2?style=flat&logo=dart)](https://dart.dev)
+[![SQLite](https://img.shields.io/badge/SQLite-003B57?style=flat&logo=sqlite)](https://www.sqlite.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 </div>
 
@@ -62,26 +66,18 @@
 
 <!-- ABOUT THE PROJECT -->
 # About Doable: Todo List App
-<br>
-<p align="center">
-<img src="/img/home-preview.png" style="height:75vh; width:auto;"> <img src="/img/add-task-preview.png" style="height:75vh; width:auto;"> <img src="/img/edit-task-preview.png" style="height:75vh; width:auto;"> <img src="/img/filter-preview.png" style="height:75vh; width:auto;"> <img src="/img/notification-preview.png" style="height:75vh; width:auto;">    
-</p>
-
-<br>
-Doable is a Todo List App that makes your life well-organised and productive. It's easy-to-use UI and professional design makes Doeable the best Todo List App for you. Doable allows you to get more work done and arrange your scattered Todo List from your mind. More than just a Todo List, Doable is your key to:
+An offline, single‑device to‑do app built with Flutter and SQLite. Features task management with reminders, date/time pickers, and filtering capabilities.
 <br><br>
 
-1. Enhanced personal productivity: Achieve more in less time and free up mental space for what truly matters.
-2. Reduced stress and anxiety: Gain control over your schedule and eliminate the burden of remembering countless tasks.
-3. A sense of accomplishment: Experience the satisfaction of checking off completed tasks and witnessing your progress.
+## 📱 Features
 
-Key Features:
-
-1. Seamless Task Management: Create, edit, and delete tasks with ease.
-2. Prioritize and Organize: Rearrange tasks to suit your workflow and mark them as completed for satisfaction.
-3. Never Miss a Deadline: Set notification reminders with specific dates and times, and receive handy notifications to keep you on track.
-4. Repeat for Consistency: Set tasks to repeat daily, weekly, or monthly for recurring activities.
-5. Find What You Need Fast: Utilize the built-in search function to quickly locate specific tasks within your list.
+- ✅ **Task Management** - Create, edit, delete tasks with title and optional description
+- ⏰ **Smart Scheduling** - Date and time pickers with reminder notifications
+- 🔄 **Repeat Rules** - Daily, Weekly, Monthly options with custom weekday selection
+- 🔍 **Advanced Filtering** - Filter by date, time, completion status, repeat rules, and reminders
+- 📱 **Intuitive UI** - Swipe-to-delete completed tasks, clean Material Design
+- 💾 **Offline First** - Local SQLite storage, no network required
+- 🗑️ **Data Management** - Clear all data option in settings
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -102,6 +98,10 @@ Flutter is an open source framework developed and supported by Google. App Devel
 This is an example of how you may give instructions on setting up your project locally. To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
+
+- [Flutter SDK](https://flutter.dev/docs/get-started/install) (3.0+)
+- [Dart SDK](https://dart.dev/get-dart) (3.2.6+)
+- Android Studio or VS Code with Flutter extension
 
 Make sure you have `git` installed, type `git --version` in your cmd. (git official download page: https://git-scm.com/downloads)
   
@@ -135,34 +135,172 @@ Steps to install code and app into your local device (and run app on emulator or
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## 🏗️ Tech Stack
 
-<!-- USAGE -->
+| Technology | Purpose | Version |
+|------------|---------|---------|
+| [Flutter](https://flutter.dev) | UI Framework | 3.0+ |
+| [SQLite](https://www.sqlite.org) | Local Database | via sqflite ^2.4.0 |
+| [SharedPreferences](https://pub.dev/packages/shared_preferences) | Settings Storage | ^2.3.2 |
+| [flutter_svg](https://pub.dev/packages/flutter_svg) | Vector Graphics | ^2.0.10 |
+| [intl](https://pub.dev/packages/intl) | Date Formatting | ^0.20.2 |
+| [url_launcher](https://pub.dev/packages/url_launcher) | External Links | ^6.3.0 |
 
-## Usage
-<!-- TODO: ADD CODE EXAMPLES AND DEMO -->
+
+## 📂 Project Structure
+
+lib/<br>
+├── main.dart # App entry point<br>
+├── screens/ # UI screens<br>
+│ ├── home_page.dart # Main task list<br>
+│ ├── add_task_page.dart # Create new tasks<br>
+│ ├── edit_task_page.dart # Modify existing tasks<br>
+│ └── settings_page.dart # App settings<br>
+├── data/ # Data layer<br>
+│ ├── database_service.dart # SQLite management<br>
+│ └── task_dao.dart # Database operations<br>
+├── models/ # Data models<br>
+│ └── task_entity.dart # Task data structure<br>
+└── task_repository.dart # Repository pattern facade<br>
+
+
+## 🗄️ Database Schema
+
+### Tasks Table
+
+```
+CREATE TABLE tasks(
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+title TEXT NOT NULL,
+description TEXT,
+time TEXT, -- Display format: "11:30 AM"
+date TEXT, -- Display format: "26/11/24"
+has_notification INTEGER NOT NULL DEFAULT 0,
+repeat_rule TEXT, -- "Daily" | "Weekly" | "Monthly" | "Weekly:"
+completed INTEGER NOT NULL DEFAULT 0,
+created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+updated_at TEXT
+);
+```
+
+## 🎨 Architecture
+
+The app follows a clean layered architecture:
+
+```
+graph TB
+A[Presentation Layer] --> B[Repository Layer]
+B --> C[Data Access Layer]
+C --> D[SQLite Database]
+```
+
+```
+A --> E[SharedPreferences]
+
+subgraph "Presentation Layer"
+    A1[HomePage]
+    A2[AddTaskPage]
+    A3[EditTaskPage]
+    A4[SettingsPage]
+end
+
+subgraph "Data Layer"
+    C1[TaskDao]
+    C2[DatabaseService]
+end
+```
+
+
+### Key Components
+
+- **Presentation Layer**: Stateful/Stateless widgets managing UI state
+- **Repository Layer**: TaskRepository as a facade for future extensibility
+- **Data Access Layer**: TaskDao + DatabaseService for SQLite operations
+- **Domain Model**: TaskEntity for data serialization
+
+## 🔧 Configuration
+
+### Android Setup
+```
+android {
+compileSdk 34
+defaultConfig {
+minSdk 21
+targetSdk 34
+}
+compileOptions {
+sourceCompatibility JavaVersion.VERSION_17
+targetCompatibility JavaVersion.VERSION_17
+}
+}
+```
+
+
+### Build Variants
+- **Debug**: Development with debug symbols
+- **Release**: Optimized production build
+
+## 🎯 Usage Examples
+
+### Creating a Task
+```
+final task = TaskEntity(
+title: "Complete project documentation",
+description: "Write comprehensive README",
+time: "2:30 PM",
+date: "27/01/25",
+hasNotification: true,
+repeatRule: "Daily",
+completed: false,
+);
+
+await TaskDao.insert(task);
+```
+
+### Filtering Tasks
+```
+// Filter by completion status
+final incompleteTasks = tasks.where((t) => !t.completed).toList();
+
+// Filter by date
+final todayTasks = tasks.where((t) => t.date == "27/01/25").toList();
+
+// Filter by repeat rule
+final weeklyTasks = tasks.where((t) =>
+t.repeatRule?.startsWith("Weekly") == true
+).toList();
+```
+
+## 📱 Screenshots
+
 <p align="center">
-<img src="/img/home-preview.png" style="height:75vh; width:auto;"> <img src="/img/add-task-preview.png" style="height:75vh; width:auto;"> <img src="/img/edit-task-preview.png" style="height:75vh; width:auto;"> <img src="/img/filter-preview.png" style="height:75vh; width:auto;"> <img src="/img/notification-preview.png" style="height:75vh; width:auto;">    
+<img src="/img/home-preview.png" style="height:40vh; width:auto;"> <img src="/img/add-task-preview.png" style="height:40vh; width:auto;"> <img src="/img/edit-task-preview.png" style="height:40vh; width:auto;"> <img src="/img/filter-preview.png" style="height:40vh; width:auto;"> <img src="/img/notification-preview.png" style="height:40vh; width:auto;">    
 </p>
-
-For more examples, please refer to the [Documentation](https://github.com/theakhinabraham/doable-todo-list-app/wiki)_
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- ROADMAP -->
 ## Roadmap
+### Version 1.1.0
+- [x] Add, edit and remove tasks
+- [x] Complete task and undo completion
+- [x] Display tasks on home screen
+- [x] Completed tasks are striked through, swipe to delete
+- [x] Completed tasks move to the bottom
+- [x] Repeat feature (daily, weekly, monthly, no repeat)
+- [x] Set date and time for task
+- [x] Notification reminders
 
-- [ ] Add task using button & swipe to delete task (`taskId`, `taskName`, `description`)
-- [ ] Add completion status: tick and untick (`isCompleted`)
-- [ ] Display tasks as `ListView`
-- [ ] Edit task on tap 
-- [ ] Completed tasks go to bottom of `ListView`
-- [ ] Add time & date using `cupertino_date_picker` (`dueDateTime`)
-- [ ] Add repeat setting for daily, weekly and monthly (`repeat`)
-- [ ] Add notificaion reminder (`reminder`)
-- [ ] Delete completed tasks at 12:00 am daily
-- [ ] Add search bar using `searchable_dropdown`
+### Version 2.0
+- [ ] **Cloud Sync** - Optional cloud backup and sync
+- [ ] **Rich Notifications** - Local notification scheduling
+- [ ] **Advanced Repeats** - Custom repeat patterns
+- [ ] **Categories & Tags** - Task organization
+- [ ] **Dark Mode** - Theme customization
+
+### Version 2.1
+- [ ] **Collaboration** - Shared task lists
+- [ ] **Analytics** - Productivity insights
+- [ ] **Export/Import** - JSON backup functionality
+- [ ] **Widget Support** - Home screen widgets
 
 See the [open issues](https://github.com/theakhinabraham/doable-todo-list-app/issues) for a full list of proposed features (and known issues).
 
@@ -300,12 +438,16 @@ Distributed under the MIT License. Click [LICENSE.md](https://github.com/theakhi
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## 🙏 Acknowledgments
 
+- [Flutter Team](https://flutter.dev) for the amazing framework
+- [SQLite](https://www.sqlite.org) for reliable local storage
+- [Material Design](https://material.io) for design inspiration
 
 <!-- CONTACT -->
-## Contact
+## 📞 Support
 
-Akhin Abraham - [twitter.com/akhinabr](https://twitter.com/akhinabr) - theakhinabraham@gmail.com
+Akhin Abraham - [instagram.com/akhinabr](https://instagram.com/akhinabr) - theakhinabraham@gmail.com
 
 Repository Link: [https://github.com/theakhinabraham/doable-todo-list-app](https://github.com/theakhinabraham/doable-todo-list-app)
 
