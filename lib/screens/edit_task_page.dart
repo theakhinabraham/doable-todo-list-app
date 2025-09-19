@@ -241,10 +241,6 @@ class _EditTaskPageState extends State<EditTaskPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Reminder button: blue bg + white icon/text when enabled
-              _ReminderButton(
-                enabled: _reminder,
-                onTap: () => setState(() => _reminder = !_reminder),
-              ),
               SizedBox(height: bigSpacing),
 
               const _FieldLabel(text: 'Tell us about your task'),

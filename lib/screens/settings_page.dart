@@ -161,21 +161,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Allow Notifications',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: blackColor,
-                  ),
-                ),
-                // Custom-looking switch with checkmark, using standard Switch for a11y
-                Switch.adaptive(
-                  value: _notificationsEnabled,
-                  activeColor: whiteColor,
-                  activeTrackColor: blackColor,
-                  onChanged: (v) => _setNotifications(v),
-                ),
+
               ],
             ),
             const SizedBox(height: 24),

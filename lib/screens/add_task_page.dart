@@ -178,10 +178,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Set Reminder button
-              _ReminderButton(
-                enabled: _reminder,
-                onTap: _toggleReminder,
-              ),
               SizedBox(height: bigSpacing),
 
               // Title / Description
