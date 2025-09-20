@@ -3,8 +3,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 // Data layer
-import 'package:doable_todo_list_app/data/task_dao.dart';
 import 'package:doable_todo_list_app/models/task_entity.dart';
+import 'package:doable_todo_list_app/repositories/task_repository.dart';
+import 'package:doable_todo_list_app/services/notification_service.dart';
 
 class AddTaskPage extends StatefulWidget {
   const AddTaskPage({super.key});
@@ -76,7 +77,27 @@ class _AddTaskPageState extends State<AddTaskPage> {
     }
   }
 
-  void _toggleReminder() {
+  void _toggleReminder() async {
+    // Check if notifications are enabled by the user
+    final userEnabled = await NotificationService.areNotificationsEnabledByUser();
+
+    if (!userEnabled) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Notifications are disabled in settings'),
+          action: SnackBarAction(
+            label: 'Settings',
+            onPressed: () {
+              // Navigate to settings page
+              Navigator.pushNamed(context, 'settings');
+            },
+          ),
+        ),
+      );
+      return;
+    }
+
     setState(() => _reminder = !_reminder);
   }
 
@@ -133,7 +154,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       completed: false,
     );
 
-    await TaskDao.insert(entity);
+    await TaskRepository().add(entity);
     if (mounted) Navigator.pop(context, true); // return true so Home reloads
   }
 
@@ -178,6 +199,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Set Reminder button
+              _ReminderButton(
+                enabled: _reminder,
+                onTap: _toggleReminder,
+              ),
               SizedBox(height: bigSpacing),
 
               // Title / Description

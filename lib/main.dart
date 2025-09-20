@@ -1,3 +1,6 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:doable_todo_list_app/services/notification_service.dart';
+import 'package:doable_todo_list_app/repositories/task_repository.dart';
 import 'package:doable_todo_list_app/screens/add_task_page.dart';
 import 'package:doable_todo_list_app/screens/edit_task_page.dart';
 import 'package:doable_todo_list_app/screens/home_page.dart';
@@ -17,6 +20,42 @@ Color descriptionColor = const Color(0xff565656);
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter is ready
 
+  // Initialize Awesome Notifications
+  await AwesomeNotifications().initialize(
+    null, // Use default icon
+    [
+      NotificationChannel(
+        channelKey: 'task_reminders',
+        channelName: 'Task Reminders',
+        channelDescription: 'Notifications for task reminders',
+        defaultColor: blueColor,
+        ledColor: blueColor,
+        importance: NotificationImportance.High,
+        channelShowBadge: true,
+        playSound: true,
+        enableVibration: true,
+      ),
+    ],
+  );
+
+  // Request notification permissions
+  final hasPermission = await NotificationService.requestPermissions();
+  if (!hasPermission) {
+    print('Notification permission denied');
+  } else {
+    print('Notification permission granted');
+  }
+
+  // Reschedule pending notifications
+  try {
+    final tasks = await TaskRepository().fetchAll();
+    print('Rescheduling ${tasks.length} tasks');
+    await NotificationService.rescheduleAllNotifications(tasks);
+    print('Notifications rescheduled successfully');
+  } catch (e) {
+    print('Error rescheduling notifications: $e');
+  }
+
   //status bar & navigation bar colors and themes
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: whiteColor,
@@ -28,12 +67,60 @@ Future<void> main() async {
   runApp(const DoableApp());
 }
 
-class DoableApp extends StatelessWidget {
+class DoableApp extends StatefulWidget {
   const DoableApp({super.key});
+
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  State<DoableApp> createState() => _DoableAppState();
+}
+
+class _DoableAppState extends State<DoableApp> {
+  @override
+  void initState() {
+    super.initState();
+
+    // Set up notification listeners
+    AwesomeNotifications().setListeners(
+      onActionReceivedMethod: onActionReceivedMethod,
+      onNotificationCreatedMethod: onNotificationCreatedMethod,
+      onNotificationDisplayedMethod: onNotificationDisplayedMethod,
+      onDismissActionReceivedMethod: onDismissActionReceivedMethod,
+    );
+  }
+
+  @pragma("vm:entry-point")
+  static Future<void> onActionReceivedMethod(ReceivedAction receivedAction) async {
+    // Handle notification tap
+    if (receivedAction.payload?['task_id'] != null) {
+      // Navigate to home page to show the task
+      DoableApp.navigatorKey.currentState?.pushNamedAndRemoveUntil(
+        'home',
+        (route) => false,
+      );
+    }
+  }
+
+  @pragma("vm:entry-point")
+  static Future<void> onNotificationCreatedMethod(ReceivedNotification receivedNotification) async {
+    // Handle notification created
+  }
+
+  @pragma("vm:entry-point")
+  static Future<void> onNotificationDisplayedMethod(ReceivedNotification receivedNotification) async {
+    // Handle notification displayed
+  }
+
+  @pragma("vm:entry-point")
+  static Future<void> onDismissActionReceivedMethod(ReceivedAction receivedAction) async {
+    // Handle notification dismissed
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: DoableApp.navigatorKey,
       home: const HomePage(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
