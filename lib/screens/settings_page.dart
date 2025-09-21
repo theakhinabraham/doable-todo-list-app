@@ -1,11 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 
-import 'package:doable_todo_list_app/data/task_dao.dart';
+import 'package:doable_todo_list_app/services/notification_service.dart';
+import 'package:doable_todo_list_app/repositories/task_repository.dart';
 
 import '../main.dart';
 
@@ -48,6 +48,27 @@ class _SettingsPageState extends State<SettingsPage> {
           const SnackBar(content: Text('Notification permission denied')),
         );
         value = false;
+      } else {
+
+        try {
+          final tasks = await TaskRepository().fetchAll();
+          await NotificationService.rescheduleAllNotifications(tasks);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Notifications enabled and scheduled')),
+          );
+        } catch (e) {
+          print('Error rescheduling notifications: $e');
+        }
+      }
+    } else {
+      // When disabling notifications, cancel all scheduled notifications
+      try {
+        await NotificationService.cancelAllNotifications();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('All notifications cancelled')),
+        );
+      } catch (e) {
+        print('Error cancelling notifications: $e');
       }
     }
 
@@ -57,30 +78,45 @@ class _SettingsPageState extends State<SettingsPage> {
     setState(() => _notificationsEnabled = value);
   }
 
-  // Minimal notification permission flow:
-  // - iOS 10+ requires user authorization.
-  // - Android 13+ requires POST_NOTIFICATIONS permission.
-  // This stub uses platform heuristics. For full scheduling, integrate a local
-  // notifications plugin later and call its requestPermission APIs.
+  // Request notification permission using awesome_notifications
   Future<bool> _requestNotificationPermission() async {
-    // On iOS, show a simple rationale; on Android 13+, users may also need to grant it.
-    // For this lightweight example, show a dialog explaining the request.
-    final allow = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Allow notifications?'),
-        content: Text(
-          Platform.isIOS
-              ? 'This app would like to send notifications (reminders for tasks).'
-              : 'This app would like to post notifications (reminders for tasks).',
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Not now')),
-          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Allow')),
-        ],
+    return await NotificationService.requestPermissions();
+  }
+
+  Future<void> _sendTestNotification() async {
+    // Check both system permission and user preference
+    final isAllowed = await NotificationService.isNotificationAllowed();
+    if (!isAllowed) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Notification permission required')),
+      );
+      return;
+    }
+
+    if (!_notificationsEnabled) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Notifications are disabled in settings')),
+      );
+      return;
+    }
+
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: 999999, // Use a high ID for test notifications
+        channelKey: NotificationService.channelKey,
+        title: 'Test Notification',
+        body: 'This is a test notification to verify notifications are working!',
+        category: NotificationCategory.Reminder,
+        payload: {'test': 'true'},
       ),
     );
-    return allow == true;
+
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Test notification sent')),
+    );
   }
 
   Future<void> _confirmAndClearAll() async {
@@ -103,7 +139,7 @@ class _SettingsPageState extends State<SettingsPage> {
     if (confirm != true) return;
 
     // Wipe the tasks table
-    await TaskDao.clearAll();
+    await TaskRepository().clearAll();
 
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
@@ -161,8 +197,35 @@ class _SettingsPageState extends State<SettingsPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-
+                Text(
+                  'Notifications',
+                  style: TextStyle(fontSize: 16, color: blackColor, fontWeight: FontWeight.w600),
+                ),
+                Switch(
+                  value: _notificationsEnabled,
+                  onChanged: _setNotifications,
+                  activeThumbColor: blueColor,
+                ),
               ],
+            ),
+            const SizedBox(height: 16),
+
+            SizedBox(
+              height: 48,
+              child: FilledButton(
+                style: FilledButton.styleFrom(
+                  backgroundColor: blueColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  textStyle: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                  ),
+                ),
+                onPressed: _sendTestNotification,
+                child: const Text('Send Test Notification'),
+              ),
             ),
             const SizedBox(height: 24),
 

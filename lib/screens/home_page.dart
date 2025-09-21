@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart'; // for DateFormat [web:146][web:156]
 
-import 'package:doable_todo_list_app/data/task_dao.dart';
+import 'package:doable_todo_list_app/repositories/task_repository.dart';
 
 /// UI-facing model used on this page (mapped from DB rows).
 class Task {
@@ -102,7 +102,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _load() async {
-    final rows = await TaskDao.getAll();
+    final rows = await TaskRepository().fetchAll();
     final mapped = rows
         .map((e) => Task(
       id: e.id!,
@@ -125,12 +125,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _toggle(Task t) async {
-    await TaskDao.toggleCompleted(t.id, !t.completed);
+    await TaskRepository().toggle(t.id, !t.completed);
     await _load();
   }
 
   Future<void> _delete(Task t) async {
-    await TaskDao.delete(t.id);
+    await TaskRepository().delete(t.id);
     await _load();
   }
 

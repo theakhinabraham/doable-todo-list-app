@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
-import 'package:doable_todo_list_app/data/task_dao.dart';
 import 'package:doable_todo_list_app/models/task_entity.dart';
+import 'package:doable_todo_list_app/repositories/task_repository.dart';
+import 'package:doable_todo_list_app/services/notification_service.dart';
 
 // Import Task view model from Home if you keep it there,
 // or duplicate the minimal fields you need here.
@@ -161,6 +162,28 @@ class _EditTaskPageState extends State<EditTaskPage> {
     if (picked != null) setState(() => _selectedTime = picked);
   }
 
+  void _toggleReminder() async {
+    final userEnabled = await NotificationService.areNotificationsEnabledByUser();
+
+    if (!userEnabled) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Notifications are disabled in settings'),
+          action: SnackBarAction(
+            label: 'Settings',
+            onPressed: () {
+              Navigator.pushNamed(context, 'settings');
+            },
+          ),
+        ),
+      );
+      return;
+    }
+
+    setState(() => _reminder = !_reminder);
+  }
+
   // ===== Save =====
 
   Future<void> _save() async {
@@ -198,7 +221,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
       completed: _task.completed, // preserve current completed state
     );
 
-    await TaskDao.update(entity);
+    await TaskRepository().update(entity);
 
     if (mounted) Navigator.pop(context, true); // signal Home to refresh
   }
@@ -241,6 +264,10 @@ class _EditTaskPageState extends State<EditTaskPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Reminder button: blue bg + white icon/text when enabled
+              _ReminderButton(
+                enabled: _reminder,
+                onTap: _toggleReminder,
+              ),
               SizedBox(height: bigSpacing),
 
               const _FieldLabel(text: 'Tell us about your task'),
