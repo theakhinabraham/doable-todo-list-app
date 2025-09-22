@@ -210,25 +210,6 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             const SizedBox(height: 16),
 
-            SizedBox(
-              height: 48,
-              child: FilledButton(
-                style: FilledButton.styleFrom(
-                  backgroundColor: blueColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  textStyle: const TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
-                  ),
-                ),
-                onPressed: _sendTestNotification,
-                child: const Text('Send Test Notification'),
-              ),
-            ),
-            const SizedBox(height: 24),
-
             // Clear All Data pill button
             SizedBox(
               height: 48,
