@@ -139,6 +139,89 @@ class _HomePageState extends State<HomePage> {
     Navigator.of(context).pushNamed('settings');
   }
 
+  Widget _buildCompletionStats() {
+    final completed = _filteredTasks.where((t) => t.completed).length;
+    final total = _filteredTasks.length;
+    final percentage = total > 0 ? ((completed / total) * 100).toStringAsFixed(0) : '0';
+    
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.blue.shade50, Colors.blue.shade100],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.blue.shade200, width: 1),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                colors: [Colors.blue.shade400, Colors.blue.shade600],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: Center(
+              child: Text(
+                '$percentage%',
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Tasks Completed',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.blue.shade700,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '$completed of $total completed',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue.shade900,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCompletionStatsIfNeeded() {
+    final completed = _filteredTasks.where((t) => t.completed).length;
+    final total = _filteredTasks.length;
+    final percentage = total > 0 ? (completed / total) * 100 : 0.0;
+    
+    // Hide when 0% or 100%
+    if (percentage == 0 || percentage == 100) {
+      return const SizedBox.shrink();
+    }
+    
+    return _buildCompletionStats();
+  }
+
   double verticalPadding(BuildContext context) =>
       MediaQuery.of(context).size.height * 0.07;
   double horizontalPadding(BuildContext context) =>
@@ -394,6 +477,10 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 20),
+                  // Completion percentage section (hide at 0% and 100%)
+                  if (_filteredTasks.isNotEmpty)
+                    _buildCompletionStatsIfNeeded(),
                 ],
               ),
             ),
